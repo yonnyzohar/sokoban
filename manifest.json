@@ -1,0 +1,9 @@
+{
+    "display": "fullscreen",
+    "orientation": "portrait",
+    "name": "Sokoban JS",
+    "short_name": "Sokoban",
+    "start_url": ".",
+    "background_color": "#fff",
+    "description": "A Sokoban Game for Mobile"
+}
