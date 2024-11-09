@@ -1,7 +1,7 @@
 var TextureAtlas = {
     dict: {},
     atlas: null,
-    assetsPath: "sokoban.json",
+    assetsPath: "./../assets/sokoban.json",
     init: function (_loadCompleteFnctn) {
         PIXI.loader.add(TextureAtlas.assetsPath).load(function () {
             trace("ATLAS LOADED " + TextureAtlas.assetsPath);

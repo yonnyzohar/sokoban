@@ -24,15 +24,15 @@ function Main() {
     var introScreen = null;
     var self = this;
 
-    this.init = function () {
+
+    this.init = function (_onAssetsLoaded) {
         //levelNum = Model.levels.length - 1;
-        TextureAtlas.init(loadedComplete);
+        TextureAtlas.init(()=>{
+            showIntroScreen();
+            _onAssetsLoaded();
+        });
     }
 
-    function loadedComplete() {
-        //onIntroClicked();
-        showIntroScreen();
-    }
 
     function showIntroScreen() {
         introScreen = new IntroScreen();
@@ -232,9 +232,16 @@ function Main() {
 
     }
 
+    this.exposeAddListeners = function () {
+        addListeners();
+    }
 
+    this.exposeRemoveListeners = function () {
+        removeListeners();
+    }
 
     function addListeners() {
+        trace("addListeners");
         //stage.addEventListener(KeyboardEvent.KEY_UP, keyIsPressed);
         game.interactive = true;
         game.touchstart = game.mousedown = onTouchStart;
@@ -286,6 +293,7 @@ function Main() {
 
 
     function removeListeners() {
+        trace("removeListeners");
         //stage.removeEventListener(KeyboardEvent.KEY_UP, keyIsPressed);
         game.interactive = false;
         game.touchstart = game.mousedown = null;

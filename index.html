@@ -6,29 +6,56 @@
     <title>Sokoban JS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="manifest" href="manifest.json">
-    <script src="PIXI.js"></script>
+    <script src="libs/PlayMixSDK.js"></script>
+    <script src="libs/PIXI.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.0/TweenMax.min.js"></script>
 
     <script>
-        document.write("<script type='text/javascript' src='Main.js?v=" + Date.now() + "'><\/script>");
+        document.write("<script type='text/javascript' src='src/Main.js?v=" + Date.now() + "'><\/script>");
     </script>
 
-    <!--    <script src="Main.js"></script>-->
-    <script src="Model.js"></script>
-    <script src="TextureAtlas.js"></script>
-    <script src="TileTypes.js"></script>
-    <script src="Pool.js"></script>
+    
+    <script src="src/Model.js"></script>
+    <script src="src/TextureAtlas.js"></script>
+    <script src="src/TileTypes.js"></script>
+    <script src="src/Pool.js"></script>
 
-    <script src="HeroTile.js"></script>
-    <script src="WallTile.js"></script>
-    <script src="BoxTile.js"></script>
-    <script src="BGTile.js"></script>
-    <script src="PrizeTile.js"></script>
-    <script src="Base.js"></script>
-    <script src="EventDispatcher.js"></script>
-    <script src="Keyboard.js"></script>
-    <script src="IntroScreen.js"></script>
-    <script src="FitToScreenUtil.js"></script>
+    <script src="src/HeroTile.js"></script>
+    <script src="src/WallTile.js"></script>
+    <script src="src/BoxTile.js"></script>
+    <script src="src/BGTile.js"></script>
+    <script src="src/PrizeTile.js"></script>
+    <script src="src/Base.js"></script>
+    <script src="src/EventDispatcher.js"></script>
+    <script src="src/Keyboard.js"></script>
+    <script src="src/IntroScreen.js"></script>
+    <script src="src/FitToScreenUtil.js"></script>
+
+    <script>
+        var paused = false;
+        document.addEventListener("DOMContentLoaded", function () {
+            PlayMixSDK.onPlayStateChange((state) => {
+            if (state === "PAUSED") {
+                onPause();
+            } else if (state === "RUNNING") {
+                onResume();
+            }
+          });
+          
+        });
+
+        function onPause()
+        {   
+            paused = true;
+            main.exposeRemoveListeners();
+        }
+
+        function onResume()
+        {
+            paused = false;
+            main.exposeAddListeners();
+        }
+    </script>
 
 </head>
 <style>
@@ -48,9 +75,6 @@
         var renderer = null;
         var elem = document.body; // Make the body go full screen.
 
-        function trace(_str) {
-            //console.log(_str)
-        }
 
         function init() {
             var type = "WebGL "
@@ -76,7 +100,7 @@
             main = new Main();
             Model.gameHolder = main;
             Model.theStage = renderer.view;
-            main.init();
+            main.init(onAssetsLoaded);
 
             renderer.render(main);
             update();
@@ -86,8 +110,17 @@
 
         }
 
+        function onAssetsLoaded() {
+            trace("onAssetsLoaded");
+            PlayMixSDK.sendLoadedEvent();
+        }   
+
         function update() {
-            renderer.render(main);
+            if(!paused)
+            {
+                renderer.render(main);
+            }
+            
             requestAnimationFrame(update);
         }
 
