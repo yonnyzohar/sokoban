@@ -1,11 +1,17 @@
 var TextureAtlas = {
     dict: {},
     atlas: null,
-    assetsPath: window.location + "/assets/sokoban.json",
+    assetsPath:  "/assets/sokoban.json",
     init: function (_loadCompleteFnctn) {
-        PIXI.loader.add(TextureAtlas.assetsPath).load(function () {
-            trace("ATLAS LOADED " + TextureAtlas.assetsPath);
-            atlas = PIXI.loader.resources[TextureAtlas.assetsPath].textures;
+        let url = window.location.href;
+            url = url.substring(0, url.lastIndexOf("/"));
+            url += TextureAtlas.assetsPath;
+        PIXI.loader.add(url).load(function () {
+            
+            
+            trace("ATLAS LOADED " + url);
+
+            atlas = PIXI.loader.resources[url].textures;
             //GlobalEventDispatcher.getInstance().dispatchEvent("ASSETS_LOADED");
             _loadCompleteFnctn();
         });
